@@ -6,7 +6,6 @@ import { FaMoon } from "react-icons/fa";
 
 const Header = () => {
   const path = useLocation().pathname;
-  console.log(path);
 
   return (
     <Navbar className="border-b-2">
@@ -14,9 +13,9 @@ const Header = () => {
         to="/"
         className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white"
       >
-        <spna className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
+        <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
           Gevendra's
-        </spna>
+        </span>
         Blog
       </Link>
       <form>

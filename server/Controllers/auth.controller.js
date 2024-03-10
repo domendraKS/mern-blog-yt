@@ -20,13 +20,13 @@ export const signup = async (req, res, next) => {
   //if email is already exist
   const dEmail = await UserModel.findOne({ email });
   if (dEmail) {
-    next(errorHandler(400, "This email is already registered."));
+    return next(errorHandler(400, "This email is already registered."));
   }
 
   //if username is already exist
   const dUser = await UserModel.findOne({ username });
   if (dUser) {
-    next(errorHandler(400, "This username is already registered."));
+    return next(errorHandler(400, "This username is already registered."));
   }
 
   const hashedPassword = bcryptjs.hashSync(password, 10);
