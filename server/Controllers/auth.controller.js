@@ -3,6 +3,7 @@ import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.handler.js";
 import jwt from "jsonwebtoken";
 
+//Sign up
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
 
@@ -46,6 +47,7 @@ export const signup = async (req, res, next) => {
   }
 };
 
+//Sing in
 export const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -62,7 +64,7 @@ export const signin = async (req, res, next) => {
 
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET_KEY);
 
-    //without password
+    //send valid user data without password
     const { password: hashedPassword, ...rest } = validUser._doc;
 
     return res
