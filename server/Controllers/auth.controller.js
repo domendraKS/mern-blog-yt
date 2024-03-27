@@ -79,3 +79,44 @@ export const signin = async (req, res, next) => {
     return next(error);
   }
 };
+
+//google authentication
+export const google = async (req, res, next) => {
+  const { name, email, googlePhotoUrl } = req.body;
+
+  try {
+    const validUser = await UserModel.findOne({ email });
+
+    if (validUser) {
+      const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET_KEY);
+      const { password, ...rest } = validUser._doc;
+
+      return res
+        .status(200)
+        .cookie("access_token", token, { httpOnly: true })
+        .json({ success: true, message: "Successfully login", user: rest });
+    } else {
+      const generatePassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+
+      const hashedPassword = bcryptjs.hashSync(generatePassword, 10);
+
+      const newUser = await UserModel({
+        username: name,
+        email,
+        password: hashedPassword,
+        profilePicture: googlePhotoUrl,
+      });
+      await newUser.save();
+
+      const { password, ...rest } = newUser._doc;
+
+      return res
+        .status(200)
+        .json({ success: true, message: "Successfully signup", user: rest });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
