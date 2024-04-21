@@ -42,7 +42,7 @@ export default function OAuth() {
         navigate("/");
       }
     } catch (error) {
-      dispatch(signInFail(data));
+      dispatch(signInFail(error));
     }
   };
 
