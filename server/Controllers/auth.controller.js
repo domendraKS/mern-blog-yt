@@ -19,6 +19,34 @@ export const signup = async (req, res, next) => {
     return next(errorHandler(400, "All fields are required"));
   }
 
+  //check correct username
+  if (req.body.username) {
+    if (req.body.username.length < 6 || req.body.username.length > 20) {
+      return next(
+        errorHandler(400, "Username must be between 6 to 20 character")
+      );
+    }
+
+    if (req.body.username.includes(" ")) {
+      return next(errorHandler(400, "Username cannot contain spaces"));
+    }
+
+    if (req.body.username.tolLowerCase()) {
+      return next(errorHandler(400, "Username must be lowercase"));
+    }
+
+    if (req.body.username.match(/^[a-zA-Z0-9]+$/)) {
+      return next(
+        errorHandler(400, "Username can only contain letters and numbers")
+      );
+    }
+  }
+
+  //if password must be 6 character
+  if (password) {
+    return next(errorHandler(400, "Password must be at least 6 character"));
+  }
+
   //if email is already exist
   const dEmail = await UserModel.findOne({ email });
   if (dEmail) {
@@ -114,7 +142,7 @@ export const google = async (req, res, next) => {
       const { password, ...rest } = newUser._doc;
 
       return res
-        .status(200)
+        .status(201)
         .cookie("access_token", token, { httpOnly: true })
         .json({ success: true, message: "Successfully signup", user: rest });
     }
