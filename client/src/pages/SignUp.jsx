@@ -21,6 +21,29 @@ function SignUp() {
       return setErrorMessage("Please fill all fields");
     }
 
+    if (formData.username) {
+      if (formData.username.length < 6 || formData.username.length > 20) {
+        return setErrorMessage("Username must be between 6 to 20 character");
+      }
+
+      if (formData.username.includes(" ")) {
+        return setErrorMessage("Username cannot contain spaces");
+      }
+
+      if (formData.username.toLowerCase() !== formData.username) {
+        return setErrorMessage("Username must be lowercase");
+      }
+
+      if (!formData.username.match(/^[a-zA-Z0-9]+$/)) {
+        return setErrorMessage("Username can only contain letters and numbers");
+      }
+    }
+
+    //if password must be 6 character
+    if (password.length < 6) {
+      return setErrorMessage("Password must be at least 6 character");
+    }
+
     try {
       setLoading(true);
       setErrorMessage(null);

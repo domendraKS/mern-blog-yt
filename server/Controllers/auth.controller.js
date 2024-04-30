@@ -20,22 +20,22 @@ export const signup = async (req, res, next) => {
   }
 
   //check correct username
-  if (req.body.username) {
-    if (req.body.username.length < 6 || req.body.username.length > 20) {
+  if (username) {
+    if (username.length < 6 || username.length > 20) {
       return next(
         errorHandler(400, "Username must be between 6 to 20 character")
       );
     }
 
-    if (req.body.username.includes(" ")) {
+    if (username.includes(" ")) {
       return next(errorHandler(400, "Username cannot contain spaces"));
     }
 
-    if (req.body.username.tolLowerCase()) {
+    if (username.toLowerCase() !== username) {
       return next(errorHandler(400, "Username must be lowercase"));
     }
 
-    if (req.body.username.match(/^[a-zA-Z0-9]+$/)) {
+    if (!username.match(/^[a-zA-Z0-9]+$/)) {
       return next(
         errorHandler(400, "Username can only contain letters and numbers")
       );
@@ -43,7 +43,7 @@ export const signup = async (req, res, next) => {
   }
 
   //if password must be 6 character
-  if (password) {
+  if (password.length < 6) {
     return next(errorHandler(400, "Password must be at least 6 character"));
   }
 

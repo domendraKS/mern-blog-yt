@@ -13,7 +13,7 @@ import OAuth from "../components/OAuth";
 function SignIn() {
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
-  const { loading, errorMessage } = useSelector((state) => state.user);
+  const { loading, error } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
 
@@ -27,6 +27,10 @@ function SignIn() {
 
     if (!formData.email || !formData.password) {
       return dispatch(signInFail("All fiels are required"));
+    }
+
+    if (formData.password.length < 6) {
+      return dispatch(signInFail("Password must be at least 6 character"));
     }
 
     try {
@@ -79,6 +83,7 @@ function SignIn() {
                 placeholder="name@company.com"
                 id="email"
                 onChange={handleChange}
+                required
               />
             </div>
             <div className="">
@@ -88,6 +93,7 @@ function SignIn() {
                 placeholder="Password"
                 id="password"
                 onChange={handleChange}
+                required
               />
             </div>
             <Button
@@ -112,9 +118,9 @@ function SignIn() {
               Sign Up
             </Link>
           </div>
-          {errorMessage && (
+          {error && (
             <Alert className="mt-5" color="failure">
-              {errorMessage}
+              {error}
             </Alert>
           )}
         </div>
