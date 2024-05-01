@@ -6,6 +6,7 @@ export const getUser = (req, res) => {
   return res.json({ message: "Get users" });
 };
 
+//Update User Profile
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.userId) {
     return next(errorHandler(403, "You are not allowed to update the user"));
@@ -65,5 +66,22 @@ export const updateUser = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+  }
+};
+
+//Delete User
+export const deleteUser = async (req, res, next) => {
+  if (req.user.id !== req.params.userId) {
+    return next(errorHandler(400, "You are not allowed to delete the user"));
+  }
+
+  try {
+    await UserModel.findOneAndDelete(req.user.id);
+    return res.json({
+      success: true,
+      message: "User Successfully Delete",
+    });
+  } catch (error) {
+    return next(error);
   }
 };
