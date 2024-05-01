@@ -100,6 +100,11 @@ const DashProfile = () => {
       return;
     }
 
+    if (formData.password.trim() === "") {
+      setUpdateUserError("Password cannot contain space...!");
+      return;
+    }
+
     try {
       dispatch(userUpdateStart());
 
