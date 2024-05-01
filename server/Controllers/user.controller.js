@@ -11,14 +11,6 @@ export const updateUser = async (req, res, next) => {
     return next(errorHandler(403, "You are not allowed to update the user"));
   }
 
-  if (!req.body.username || req.body.username.trim() === "") {
-    return next(errorHandler(400, "Username is required"));
-  }
-
-  if (!req.body.email || req.body.email.trim() === "") {
-    return next(errorHandler(400, "Email is required"));
-  }
-
   if (req.body.username) {
     if (req.body.username.length < 6 || req.body.username.length > 20) {
       return next(
@@ -66,9 +58,11 @@ export const updateUser = async (req, res, next) => {
       { new: true }
     );
     const { password, ...rest } = updatedUser._doc;
-    return res
-      .status(200)
-      .json({ success: true, message: "Successfully Updated", user: rest });
+    return res.status(200).json({
+      success: true,
+      message: "User's Profile Updated Successfully",
+      user: rest,
+    });
   } catch (error) {
     next(error);
   }

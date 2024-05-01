@@ -24,3 +24,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#exist image remove from firebase
+#update user with empty password or space its save blank
