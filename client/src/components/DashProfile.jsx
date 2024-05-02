@@ -11,6 +11,7 @@ import {
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import {
+  signOut,
   userDeleteFail,
   userDeleteStart,
   userDeleteSuccess,
@@ -157,6 +158,22 @@ const DashProfile = () => {
     }
   };
 
+  //signout
+  const handleSignout = async () => {
+    try {
+      const res = await fetch("/api/auth/signOut", { method: "POST" });
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.log(data);
+      } else {
+        dispatch(signOut());
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className="text-center my-7 font-semibold text-3xl">Profile</h1>
@@ -232,7 +249,9 @@ const DashProfile = () => {
         <span className="cursor-pointer" onClick={() => setShowModal(true)}>
           Delete Account
         </span>
-        <span className="cursor-pointer">Sign Out</span>
+        <span className="cursor-pointer" onClick={handleSignout}>
+          Sign Out
+        </span>
       </div>
       {updateUserSuccess && (
         <Alert color="success" className="mt-5">

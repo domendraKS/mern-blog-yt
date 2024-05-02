@@ -150,3 +150,23 @@ export const google = async (req, res, next) => {
     next(error);
   }
 };
+
+export const signOut = async (req, res, next) => {
+  try {
+    // const cookiesWithName = req.headers.cookie;
+    // const cookies = cookiesWithName.split(";").reduce((cookiesObj, cookie) => {
+    //   const [name, value] = cookie.trim().split("=");
+    //   cookiesObj[name] = value;
+    //   return cookiesObj;
+    // }, {});
+
+    // const token = cookies.access_token;
+
+    return res
+      .clearCookie("access_token")
+      .status(200)
+      .json({ success: true, message: "User has been signed out" });
+  } catch (error) {
+    next(error);
+  }
+};
