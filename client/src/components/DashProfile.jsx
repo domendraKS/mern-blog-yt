@@ -106,10 +106,11 @@ const DashProfile = () => {
       setUpdateUserError("Please wait image is uploading..!");
       return;
     }
-
-    if (formData.password.trim() === "") {
-      setUpdateUserError("Password cannot contain space...!");
-      return;
+    if (formData.password) {
+      if (formData.password.trim() === "") {
+        setUpdateUserError("Password cannot contain space...!");
+        return;
+      }
     }
 
     try {
@@ -125,7 +126,6 @@ const DashProfile = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        setUpdateUserError(data.message);
         dispatch(userUpdateFail(data.message));
       } else {
         setUpdateUserSuccess(data.message);
