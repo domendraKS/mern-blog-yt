@@ -90,7 +90,10 @@ export const signin = async (req, res, next) => {
     const validPassword = bcryptjs.compareSync(password, validUser.password);
     if (!validPassword) return next(errorHandler(401, "Wrong credentials"));
 
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET_KEY);
+    const token = jwt.sign(
+      { id: validUser._id, isAdmin: validUser.isAdmin },
+      process.env.JWT_SECRET_KEY
+    );
 
     //send valid user data without password
     const { password: hashedPassword, ...rest } = validUser._doc;
@@ -116,7 +119,10 @@ export const google = async (req, res, next) => {
     const validUser = await UserModel.findOne({ email });
 
     if (validUser) {
-      const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET_KEY);
+      const token = jwt.sign(
+        { id: validUser._id, isAdmin: validUser.isAdmin },
+        process.env.JWT_SECRET_KEY
+      );
       const { password, ...rest } = validUser._doc;
 
       return res
@@ -138,7 +144,10 @@ export const google = async (req, res, next) => {
       });
       await newUser.save();
 
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY);
+      const token = jwt.sign(
+        { id: newUser._id, isAdmin: newUser.isAdmin },
+        process.env.JWT_SECRET_KEY
+      );
       const { password, ...rest } = newUser._doc;
 
       return res
