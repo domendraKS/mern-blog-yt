@@ -20,9 +20,10 @@ import {
   userUpdateSuccess,
 } from "../redux/user/userSlice.js";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 const DashProfile = () => {
-  const { currentUser, error } = useSelector((state) => state.user);
+  const { currentUser, error, loading } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const filePickerRef = useRef();
@@ -241,9 +242,19 @@ const DashProfile = () => {
           placeholder="Password"
           onChange={handleChange}
         />
-        <Button type="submit" gradientDuoTone="purpleToBlue" outline>
-          Update
+        <Button
+          type="submit"
+          gradientDuoTone="purpleToBlue"
+          outline
+          disabled={loading || imageUploadingProgress}
+        >
+          {loading ? "Loading..!" : "Update"}
         </Button>
+        <Link to={"/create-post"}>
+          <Button className="w-full" gradientDuoTone="purpleToPink">
+            Create a Post
+          </Button>
+        </Link>
       </form>
       <div className="text-red-500 flex justify-between mt-3">
         <span className="cursor-pointer" onClick={() => setShowModal(true)}>
