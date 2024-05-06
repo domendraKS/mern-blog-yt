@@ -21,7 +21,7 @@ const CreatePost = () => {
               className="flex-1"
             />
             <Select>
-              <option>Select a category</option>
+              <option value="uncategorized">Select a category</option>
               <option value="JavaScript">JavaScript</option>
               <option value="reactjs">React.js</option>
               <option value="nextjs">Next.js</option>

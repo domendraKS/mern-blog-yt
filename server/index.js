@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import "dotenv/config";
 import userRoute from "./Routes/user.route.js";
 import authRoute from "./Routes/auth.route.js";
+import postRoute from "./Routes/post.route.js";
 
 const app = express();
 app.use(express.json());
@@ -29,6 +30,7 @@ app.listen(PORT, () => {
 //Routes
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
+app.use("/api/post", postRoute);
 
 //error handler
 app.use((err, req, res, next) => {
