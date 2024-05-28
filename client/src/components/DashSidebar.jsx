@@ -56,7 +56,7 @@ const DashSidebar = () => {
                 labelColor={"dark"}
                 as={"div"}
               >
-                Profile
+                Posts
               </Sidebar.Item>
             </Link>
           )}
