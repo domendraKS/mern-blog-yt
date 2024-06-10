@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 const DashPosts = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [userPosts, setUserPosts] = useState([]);
+  const [showMore, setShowMore] = useState(true);
 
   const fetchPosts = async () => {
     try {
@@ -15,6 +16,9 @@ const DashPosts = () => {
       );
       if (res.data.success) {
         setUserPosts(res.data.posts);
+        if (res.data.length < 9) {
+          setShowMore(false);
+        }
       }
     } catch (error) {
       console.log(error.message);
@@ -26,6 +30,25 @@ const DashPosts = () => {
       fetchPosts();
     }
   }, []);
+
+  const handleShowMore = async () => {
+    const startIndex = userPosts.length;
+
+    try {
+      const res = await axios.get(
+        `/api/post/getAll-posts?userId=${currentUser.user._id}&startIndex=${startIndex}`
+      );
+
+      if (res.data.success) {
+        setUserPosts((prev) => [...prev, ...res.data.posts]);
+        if (res.data.length < 9) {
+          setShowMore(false);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -87,6 +110,14 @@ const DashPosts = () => {
                 ))}
               </Table.Body>
             </Table>
+            {showMore && (
+              <button
+                className="w-full text-teal-500 self-center"
+                onClick={handleShowMore}
+              >
+                Show More
+              </button>
+            )}
           </>
         ) : (
           <p>You have no posts yet..!</p>
