@@ -85,3 +85,54 @@ export const deleteUser = async (req, res, next) => {
     return next(error);
   }
 };
+
+//Get All User
+export const getAllUser = async (req, res, next) => {
+  if (!req.user.isAdmin) {
+    return next(errorHandler(403, "You are not allowed to see all the users"));
+  }
+
+  try {
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const sortDirection = req.query.sort === "asc" ? 1 : -1;
+
+    // Correct sorting object
+    const sortField = req.query.sortField || "createdAt"; // default sort field
+    const sortObject = { [sortField]: sortDirection };
+
+    const users = await UserModel.find()
+      .sort(sortObject)
+      .skip(startIndex)
+      .limit(limit);
+
+    const usersWithoutPassword = users.map((user) => {
+      const { password, ...rest } = user._doc;
+      return rest;
+    });
+
+    const totalUsers = await UserModel.countDocuments();
+
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthUsers = await UserModel.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Get All Users Successfully",
+      users: usersWithoutPassword,
+      totalUsers,
+      lastMonthUsers,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
