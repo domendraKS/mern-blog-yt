@@ -4,6 +4,7 @@ import "dotenv/config";
 import userRoute from "./Routes/user.route.js";
 import authRoute from "./Routes/auth.route.js";
 import postRoute from "./Routes/post.route.js";
+import commentRoute from "./Routes/comment.route.js";
 
 const app = express();
 app.use(express.json());
@@ -31,6 +32,7 @@ app.listen(PORT, () => {
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/post", postRoute);
+app.use("/api/comment", commentRoute);
 
 //error handler
 app.use((err, req, res, next) => {
