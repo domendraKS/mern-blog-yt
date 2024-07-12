@@ -1,14 +1,16 @@
 import { Alert, Button, Textarea } from "flowbite-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Comments from "./Comments";
 
 const CommentsSection = ({ postId }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [commentError, setCommentError] = useState(null);
+  const [postComments, setPostComments] = useState([]);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +32,7 @@ const CommentsSection = ({ postId }) => {
       if (res.data.success) {
         setComment("");
         setCommentError(null);
+        setPostComments([res.data.comment, ...postComments]);
       }
     } catch (error) {
       setCommentError(error.response.data.message);
@@ -37,6 +40,21 @@ const CommentsSection = ({ postId }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const getCommetns = async () => {
+      try {
+        const res = await axios.get(`/api/comment/getPostComments/${postId}`);
+
+        if (res.data.success) {
+          setPostComments(res.data.comments);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCommetns();
+  }, [postId]);
 
   return (
     <>
@@ -91,6 +109,23 @@ const CommentsSection = ({ postId }) => {
             </div>
             {commentError && <Alert color="failure">{commentError}</Alert>}
           </form>
+        )}
+        {postComments.length === 0 ? (
+          <p className="text-sm text-center my-3 text-black dark:text-teal-400">
+            No comments yet
+          </p>
+        ) : (
+          <>
+            <div className="my-3 flex items-center gap-2">
+              <p className="inline">Comments </p>
+              <div className="border border-gray-600 px-1 rounded-sm">
+                <p> {postComments.length}</p>
+              </div>
+            </div>
+            {postComments.map((cmt) => (
+              <Comments key={cmt._id} comment={cmt} />
+            ))}
+          </>
         )}
       </div>
     </>

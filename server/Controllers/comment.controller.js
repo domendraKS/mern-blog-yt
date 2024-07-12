@@ -1,6 +1,7 @@
 import CommentModel from "../Models/comment.model.js";
 import { errorHandler } from "../utils/error.handler.js";
 
+//Create post comments
 export const createComment = async (req, res, next) => {
   try {
     const { content, postId, userId } = req.body;
@@ -29,6 +30,25 @@ export const createComment = async (req, res, next) => {
       success: true,
       message: "Comment is posted",
       comment: saveComment,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//get all comments through the postId
+export const getPostComments = async (req, res, next) => {
+  const postId = req.params.postId;
+
+  try {
+    const comments = await CommentModel.find({ postId }).sort({
+      createdAt: -1,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Get All comments successfully",
+      comments,
     });
   } catch (error) {
     next(error);

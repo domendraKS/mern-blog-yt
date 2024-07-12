@@ -2,10 +2,6 @@ import UserModel from "../Models/user.model.js";
 import { errorHandler } from "../utils/error.handler.js";
 import bcryptjs from "bcryptjs";
 
-export const getUser = (req, res) => {
-  return res.json({ message: "Get users" });
-};
-
 //Update User Profile
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.userId) {
@@ -132,6 +128,31 @@ export const getAllUser = async (req, res, next) => {
       totalUsers,
       lastMonthUsers,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//get user
+export const getUser = async (req, res, next) => {
+  const userId = req.params.userId;
+
+  try {
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      next(errorHandler(404, "No user found"));
+    }
+
+    const { password, ...rest } = user._doc;
+
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: "Get single user successfully",
+        user: rest,
+      });
   } catch (error) {
     next(error);
   }
