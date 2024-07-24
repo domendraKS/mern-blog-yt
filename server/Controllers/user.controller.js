@@ -146,13 +146,11 @@ export const getUser = async (req, res, next) => {
 
     const { password, ...rest } = user._doc;
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Get single user successfully",
-        user: rest,
-      });
+    return res.status(200).json({
+      success: true,
+      message: "Get single user successfully",
+      user: rest,
+    });
   } catch (error) {
     next(error);
   }
