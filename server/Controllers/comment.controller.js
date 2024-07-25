@@ -83,3 +83,34 @@ export const likeComment = async (req, res, next) => {
     next(error);
   }
 };
+
+export const editComment = async (req, res, next) => {
+  try {
+    const comment = await CommentModel.findById(req.params.commentId);
+    if (!comment) {
+      return next(errorHandler(404, "Comment not found"));
+    }
+
+    if (comment.userId !== req.user.id && !req.user.isAdmin) {
+      return next(errorHandler(401, "You are not edit this comment"));
+    }
+
+    const updatedComment = await CommentModel.findByIdAndUpdate(
+      req.params.commentId,
+      {
+        $set: {
+          content: req.body.content,
+        },
+      },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Comment updated successfully",
+      comment: updatedComment,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
