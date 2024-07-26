@@ -5,7 +5,7 @@ import { FaThumbsUp } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
-const Comments = ({ comment, onLike, onEdit }) => {
+const Comments = ({ comment, onLike, onEdit, onDelete }) => {
   const [user, setUser] = useState({});
   const { currentUser } = useSelector((state) => state.user);
   const [isEditing, setIsEditing] = useState(false);
@@ -144,7 +144,13 @@ const Comments = ({ comment, onLike, onEdit }) => {
                       >
                         Edit
                       </button>
-                      <button>Delete</button>
+                      <button
+                        type="button"
+                        onClick={() => onDelete(comment._id)}
+                        className="hover:text-red-500"
+                      >
+                        Delete
+                      </button>
                     </>
                   )}
               </div>
