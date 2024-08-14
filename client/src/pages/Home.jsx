@@ -9,7 +9,7 @@ function Home() {
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get(`/api/post/getAll-posts`);
+      const res = await axios.get(`/api/post/getAll-posts?limit=6&order=desc`);
       if (res.data.success) {
         setPosts(res.data.posts);
       }
